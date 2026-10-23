@@ -40,7 +40,6 @@ const submotivos = {
     {"codigo": "CA1", "descripcion": "Caja de medidor en mal estado / corroída"},
     {"codigo": "CA5", "descripcion": "Caja embutida"},
     {"codigo": "MU1", "descripcion": "Murete derruido / agrietado"}
-    // Se ha resumido por espacio, agrega los restantes de tu hoja 2 si los necesitas
   ],
   "DE07": [
     {"codigo": "IN1", "descripcion": "Caja medidor inaccesible por plantas o arbustos"},
@@ -88,7 +87,7 @@ impSelect.addEventListener('change', (e) => {
 
 // Restricción de 5 fotos y Previsualización para móviles
 const fotosInput = document.getElementById('fotos');
-const previewContainer = document.getElementById('preview-container');
+const previewContainer = document.getElementById('previewContainer'); // <-- CORREGIDO
 
 fotosInput.addEventListener('change', function() {
     previewContainer.innerHTML = ''; // Limpiar previsualizaciones anteriores
@@ -173,7 +172,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
         tipo_acometida: document.getElementById('tipo_acometida').value,
         impedimento_cod: document.getElementById('impedimento').value,
         submotivo_cod: subGroup.style.display !== 'none' ? document.getElementById('submotivo').value : null,
-        itm_portafusible: document.getElementById('itm_portafusible').value, // <--- NUEVO CAMPO
+        itm_portafusible: document.getElementById('itm_portafusible').value, 
         fotos_urls: fotosUrls
     };
 
@@ -185,6 +184,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
         alert('Catastro registrado exitosamente.');
         document.getElementById('catastroForm').reset();
         subGroup.style.display = 'none';
+        previewContainer.innerHTML = ''; // Limpia las fotos de la vista al guardar
     }
     
     btnGuardar.disabled = false;
