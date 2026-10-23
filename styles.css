@@ -75,13 +75,16 @@ input[readonly] {
     border-color: #e0e0e0;
 }
 
-.search-box {
+/* ====== CONTENEDOR DE BÚSQUEDA CORREGIDO PARA MÓVIL ====== */
+.search-container {
     display: flex;
     gap: 10px;
+    width: 100%;
 }
 
-.search-box input {
+.search-container input {
     flex: 1;
+    min-width: 0; /* Previene que el input rompa el flexbox en móviles */
 }
 
 /* Botones en azul corporativo */
@@ -100,7 +103,8 @@ button {
     margin-top: 10px;
 }
 
-.search-box button {
+.search-container button {
+    flex-shrink: 0; /* Obliga al botón a mantener su tamaño original */
     width: auto;
     margin-top: 0;
     padding: 12px 20px;
@@ -150,6 +154,7 @@ small {
     transform: scale(0.98);
 }
 
+/* ====== PREVISUALIZACIÓN DE FOTOS ====== */
 .preview-container {
     display: flex;
     flex-wrap: wrap;
@@ -157,15 +162,20 @@ small {
     margin-top: 15px;
 }
 
-.preview-image {
-    width: calc(20% - 8px);
-    min-width: 50px;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #e0e0e0;
+.preview-wrapper {
+    position: relative;
+    width: 70px;
+    height: 70px;
 }
 
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #cccccc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
 /* ====== ESTILOS PARA EL DASHBOARD DE ADMIN ====== */
 .admin-body {
