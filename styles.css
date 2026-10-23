@@ -1,0 +1,307 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+body {
+    margin: 0;
+    padding: 15px;
+    font-family: 'Poppins', sans-serif;
+    /* Gradiente corporativo basado en el mockup */
+    background: linear-gradient(135deg, #FFD100, #F37021);
+    color: #333333;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* El contenedor ahora es una tarjeta blanca sólida para contraste en campo */
+.glass-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+h2 {
+    text-align: center;
+    margin-top: 0;
+    color: #283583; /* Azul marino del logo */
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.half {
+    flex: 1;
+}
+
+label {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    color: #555555;
+    font-weight: 500;
+}
+
+input, select {
+    font-family: 'Poppins', sans-serif;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+    color: #333333;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #283583;
+    box-shadow: 0 0 0 2px rgba(40, 53, 131, 0.2);
+}
+
+input[readonly] {
+    background: #f5f5f5;
+    color: #777777;
+    border-color: #e0e0e0;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+}
+
+.search-box input {
+    flex: 1;
+}
+
+/* Botones en azul corporativo */
+button {
+    font-family: 'Poppins', sans-serif;
+    background: #283583;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 1rem;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.search-box button {
+    width: auto;
+    margin-top: 0;
+    padding: 12px 20px;
+}
+
+button:hover:not(:disabled) {
+    background: #1d2660;
+}
+
+button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    color: #777777;
+}
+
+small {
+    font-size: 0.75rem;
+    color: #666666;
+    margin-top: 5px;
+}
+
+/* ====== ESTILOS PARA SUBIDA DE FOTOS EN MÓVIL ====== */
+.hidden-input {
+    display: none;
+}
+
+.custom-file-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f8f9fa;
+    border: 2px dashed #283583;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: #283583;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-top: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.custom-file-button:active {
+    background: #e8eaf6;
+    transform: scale(0.98);
+}
+
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.preview-image {
+    width: calc(20% - 8px);
+    min-width: 50px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+
+/* ====== ESTILOS PARA EL DASHBOARD DE ADMIN ====== */
+.admin-body {
+    align-items: flex-start;
+    padding: 30px;
+}
+
+.dashboard-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 1200px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.dashboard-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.btn-exportar {
+    background: #4caf50;
+    width: auto;
+    margin: 0;
+    padding: 10px 20px;
+}
+
+.btn-exportar:hover {
+    background: #43a047;
+}
+
+.filters-card {
+    display: flex;
+    gap: 15px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    align-items: flex-end;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eeeeee;
+}
+
+th {
+    background: #283583;
+    color: #ffffff;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background-color: #fff9e6; /* Resalte en tono amarillo corporativo */
+}
+
+.btn-fotos {
+    background: #F37021;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    width: auto;
+    margin: 0;
+}
+
+.btn-fotos:hover {
+    background: #e65c00;
+}
+
+/* ====== MODAL DE FOTOS ====== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 800px;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #333;
+}
+
+.galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.galeria-grid img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}

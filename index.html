@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catastro - Registro de Medidores</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="glass-container">
+        <h2>Registro de Catastro</h2>
+        <form id="catastroForm">
+            <div class="form-group">
+                <label>ITM o Losa Portafusible</label>
+                <select id="itm_portafusible" required>
+                    <option value="">Seleccionar</option>
+                    <option value="ITM">ITM</option>
+                    <option value="Portafusible">Losa Portafusible</option>
+                    <option value="Ninguno">Ninguno</option>
+                </select>
+            </div>
+            <!-- Sección de Búsqueda de Suministro -->
+            <div class="form-group">
+                <label for="suministro">Buscar Suministro</label>
+                <div class="search-box">
+                    <input type="number" id="suministro" placeholder="Ej. 10017" required>
+                    <button type="button" id="btnBuscar">Buscar</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Medidor</label>
+                <input type="text" id="medidor" readonly placeholder="Se autocompleta con la búsqueda">
+            </div>
+            <div class="form-group">
+                <label>Marca</label>
+                <input type="text" id="marca" readonly placeholder="Se autocompleta con la búsqueda">
+            </div>
+
+            <!-- Campos Extraídos de Campos para catastro.xlsx -->
+            <div class="form-row">
+                <div class="form-group half">
+                    <label>Tipo de caja</label>
+                    <select id="tipo_caja" required>
+                        <option value="">Seleccionar</option>
+                        <option value="L">L</option>
+                        <option value="LT">LT</option>
+                    </select>
+                </div>
+                <div class="form-group half">
+                    <label>Tipo de chapa</label>
+                    <select id="tipo_chapa" required>
+                        <option value="">Seleccionar</option>
+                        <option value="G1">G1</option>
+                        <option value="G2">G2</option>
+                        <option value="G3">G3</option>
+                        <option value="S1000">S1000</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label>Fase</label>
+                    <select id="fase" required>
+                        <option value="">Seleccionar</option>
+                        <option value="MON">MON</option>
+                        <option value="TRI">TRI</option>
+                    </select>
+                </div>
+                <div class="form-group half">
+                    <label>Tipo de acometida</label>
+                    <select id="tipo_acometida" required>
+                        <option value="">Seleccionar</option>
+                        <option value="NKY">NKY</option>
+                        <option value="Tela">Tela</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Lógica Condicional de Impedimentos -->
+            <div class="form-group">
+                <label>Impedimento</label>
+                <select id="impedimento" required>
+                    <option value="">Seleccionar Impedimento</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="submotivo-group" style="display: none;">
+                <label>Sub motivo</label>
+                <select id="submotivo">
+                    <option value="">Seleccionar Sub motivo</option>
+                </select>
+            </div>
+
+            <!-- Subida de Fotos -->
+           <!-- Subida de Fotos (Optimizado para Móvil) -->
+            <div class="form-group">
+                <label>Fotos (Máximo 5 por registro)</label>
+                <div class="file-upload-wrapper">
+                    <!-- El input real está oculto -->
+                    <input type="file" id="fotos" accept="image/*" multiple required class="hidden-input">
+                    <!-- Este label actúa como un botón grande para móviles -->
+                    <label for="fotos" class="custom-file-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                        Tocar para Tomar o Elegir Fotos
+                    </label>
+                </div>
+                <small id="foto-help">Subir evidencia de acometidas, estado de caja, etc.</small>
+                <!-- Aquí se mostrarán las miniaturas de las fotos -->
+                <div id="preview-container" class="preview-container"></div>
+            </div>
+            <button type="submit" id="btnGuardar">Guardar Registro</button>
+        </form>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
