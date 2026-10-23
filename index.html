@@ -12,19 +12,11 @@
     <div class="glass-container">
         <h2>Registro de Catastro</h2>
         <form id="catastroForm">
-            <div class="form-group">
-                <label>ITM o Losa Portafusible</label>
-                <select id="itm_portafusible" required>
-                    <option value="">Seleccionar</option>
-                    <option value="ITM">ITM</option>
-                    <option value="Portafusible">Losa Portafusible</option>
-                    <option value="Ninguno">Ninguno</option>
-                </select>
-            </div>
+            
             <!-- Sección de Búsqueda de Suministro -->
             <div class="form-group">
                 <label for="suministro">Buscar Suministro</label>
-                <div class="search-box">
+                <div class="search-container">
                     <input type="number" id="suministro" placeholder="Ej. 10017" required>
                     <button type="button" id="btnBuscar">Buscar</button>
                 </div>
@@ -80,6 +72,17 @@
                 </div>
             </div>
 
+            <!-- ITM reubicado en su posición final -->
+            <div class="form-group">
+                <label>ITM o Losa Portafusible</label>
+                <select id="itm_portafusible" required>
+                    <option value="">Seleccionar</option>
+                    <option value="ITM">ITM</option>
+                    <option value="Portafusible">Losa Portafusible</option>
+                    <option value="Ninguno">Ninguno</option>
+                </select>
+            </div>
+
             <!-- Lógica Condicional de Impedimentos -->
             <div class="form-group">
                 <label>Impedimento</label>
@@ -95,8 +98,7 @@
                 </select>
             </div>
 
-            <!-- Subida de Fotos -->
-           <!-- Subida de Fotos (Optimizado para Móvil) -->
+            <!-- Subida de Fotos (Optimizado para Móvil) -->
             <div class="form-group">
                 <label>Fotos (Máximo 5 por registro)</label>
                 <div class="file-upload-wrapper">
@@ -110,8 +112,9 @@
                 </div>
                 <small id="foto-help">Subir evidencia de acometidas, estado de caja, etc.</small>
                 <!-- Aquí se mostrarán las miniaturas de las fotos -->
-                <div id="preview-container" class="preview-container"></div>
+                <div id="previewContainer" class="preview-container"></div>
             </div>
+            
             <button type="submit" id="btnGuardar">Guardar Registro</button>
         </form>
     </div>
