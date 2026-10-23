@@ -1,9 +1,9 @@
 // ====== CONFIGURACIÓN SUPABASE ======
 const supabaseUrl = 'https://kseaqcwhsvenxtmpqjvu.supabase.co'; // REEMPLAZAR
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzZWFxY3doc3Zlbnh0bXBxanZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NzA3NzYsImV4cCI6MjEwODM0Njc3Nn0.xb0jWWmc1AAplHZ_Whgy3d-OCvsQyKHR3W6zFpvcKvA'; // REEMPLAZAR
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const clienteSupabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// ====== DATA DE IMPEDIMENTOS Y SUBMOTIVOS (De Campos para catastro.xlsx) ======
+// ====== DATA DE IMPEDIMENTOS Y SUBMOTIVOS ======
 const impedimentos = [
   {"codigo": "DE01", "descripcion": "Cliente Ausente", "tiene_sub": true},
   {"codigo": "DE02", "descripcion": "Negativa al catastro", "tiene_sub": true},
@@ -53,7 +53,6 @@ const impSelect = document.getElementById('impedimento');
 const subSelect = document.getElementById('submotivo');
 const subGroup = document.getElementById('submotivo-group');
 
-// Poblar desplegable de impedimentos
 impedimentos.forEach(imp => {
     const opt = document.createElement('option');
     opt.value = imp.codigo;
@@ -62,7 +61,6 @@ impedimentos.forEach(imp => {
     impSelect.appendChild(opt);
 });
 
-// Dinamismo entre impedimento y submotivo
 impSelect.addEventListener('change', (e) => {
     const selected = e.target.options[e.target.selectedIndex];
     const tieneSub = selected.dataset.tieneSub === 'true';
@@ -87,18 +85,17 @@ impSelect.addEventListener('change', (e) => {
 
 // Restricción de 5 fotos y Previsualización para móviles
 const fotosInput = document.getElementById('fotos');
-const previewContainer = document.getElementById('previewContainer'); // <-- CORREGIDO
+const previewContainer = document.getElementById('previewContainer');
 
 fotosInput.addEventListener('change', function() {
-    previewContainer.innerHTML = ''; // Limpiar previsualizaciones anteriores
+    previewContainer.innerHTML = ''; 
     
     if (this.files.length > 5) {
         alert('Solo puedes subir un máximo de 5 fotos.');
-        this.value = ''; // Limpia el input
+        this.value = ''; 
         return;
     }
 
-    // Generar miniaturas de las fotos seleccionadas/tomadas
     Array.from(this.files).forEach(file => {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -112,12 +109,11 @@ fotosInput.addEventListener('change', function() {
 });
 
 // ====== COMUNICACIÓN CON SUPABASE ======
-// Búsqueda de Libro1.xlsx
 document.getElementById('btnBuscar').addEventListener('click', async () => {
     const sum = document.getElementById('suministro').value;
     if (!sum) return alert('Ingresa un suministro');
 
-    const { data, error } = await supabase
+    const { data, error } = await clienteSupabase
         .from('suministros')
         .select('*')
         .eq('suministro', sum)
@@ -133,7 +129,6 @@ document.getElementById('btnBuscar').addEventListener('click', async () => {
     }
 });
 
-// Guardado de registro y fotos
 document.getElementById('catastroForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btnGuardar = document.getElementById('btnGuardar');
@@ -146,7 +141,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await clienteSupabase.storage
             .from('fotos_catastro')
             .upload(fileName, file);
         
@@ -157,7 +152,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
             return;
         }
         
-        const { data: urlData } = supabase.storage
+        const { data: urlData } = clienteSupabase.storage
             .from('fotos_catastro')
             .getPublicUrl(fileName);
         
@@ -176,7 +171,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
         fotos_urls: fotosUrls
     };
 
-    const { error: insertError } = await supabase.from('registros_catastro').insert([registro]);
+    const { error: insertError } = await clienteSupabase.from('registros_catastro').insert([registro]);
 
     if (insertError) {
         alert('Error en base de datos: ' + insertError.message);
@@ -184,7 +179,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
         alert('Catastro registrado exitosamente.');
         document.getElementById('catastroForm').reset();
         subGroup.style.display = 'none';
-        previewContainer.innerHTML = ''; // Limpia las fotos de la vista al guardar
+        previewContainer.innerHTML = '';
     }
     
     btnGuardar.disabled = false;
