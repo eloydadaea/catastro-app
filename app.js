@@ -1,6 +1,6 @@
 // ====== CONFIGURACIÓN SUPABASE ======
-const supabaseUrl = 'https://kseaqcwhsvenxtmpqjvu.supabase.co'; // REEMPLAZAR
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzZWFxY3doc3Zlbnh0bXBxanZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NzA3NzYsImV4cCI6MjEwODM0Njc3Nn0.xb0jWWmc1AAplHZ_Whgy3d-OCvsQyKHR3W6zFpvcKvA'; // REEMPLAZAR
+const supabaseUrl = 'https://kseaqcwhsvenxtmpqjvu.supabase.co'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzZWFxY3doc3Zlbnh0bXBxanZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NzA3NzYsImV4cCI6MjEwODM0Njc3Nn0.xb0jWWmc1AAplHZ_Whgy3d-OCvsQyKHR3W6zFpvcKvA'; 
 const clienteSupabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 // ====== DATA DE IMPEDIMENTOS Y SUBMOTIVOS ======
@@ -83,7 +83,7 @@ impSelect.addEventListener('change', (e) => {
     }
 });
 
-// Restricción de 5 fotos y Previsualización para móviles
+// Previsualización y límite flexible al elegir fotos
 const fotosInput = document.getElementById('fotos');
 const previewContainer = document.getElementById('previewContainer');
 
@@ -109,6 +109,7 @@ fotosInput.addEventListener('change', function() {
 });
 
 // ====== COMUNICACIÓN CON SUPABASE ======
+// Buscar en la nueva estructura de BD
 document.getElementById('btnBuscar').addEventListener('click', async () => {
     const sum = document.getElementById('suministro').value;
     if (!sum) return alert('Ingresa un suministro');
@@ -122,21 +123,31 @@ document.getElementById('btnBuscar').addEventListener('click', async () => {
     if (error || !data) {
         alert('Suministro no encontrado en la base de datos.');
         document.getElementById('medidor').value = '';
-        document.getElementById('marca').value = '';
+        document.getElementById('distrito').value = '';
+        document.getElementById('direccion').value = '';
     } else {
-        document.getElementById('medidor').value = data.medidor;
-        document.getElementById('marca').value = data.marca_nombre || data.marca_codigo;
+        document.getElementById('medidor').value = data.medidor_actual || 'SIN DATO';
+        document.getElementById('distrito').value = data.distrito || 'SIN DATO';
+        document.getElementById('direccion').value = data.direccion || 'SIN DATO';
     }
 });
 
+// Guardado de registro y fotos con validación dura
 document.getElementById('catastroForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    const files = fotosInput.files;
+
+    if (files.length > 5) {
+        alert('⚠️ Límite excedido: El sistema solo permite un máximo de 5 fotos. Disminuye la cantidad.');
+        return;
+    }
+
     const btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.disabled = true;
     btnGuardar.textContent = 'Subiendo Datos y Fotos...';
 
     let fotosUrls = [];
-    const files = fotosInput.files;
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
