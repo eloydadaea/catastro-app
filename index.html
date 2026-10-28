@@ -5,15 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catastro - Registro de Medidores</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="glass-container">
         <h2>Registro de Catastro</h2>
         <form id="catastroForm">
+            <div class="form-group">
+                <label>ITM o Losa Portafusible</label>
+                <select id="itm_portafusible" required>
+                    <option value="">Seleccionar</option>
+                    <option value="ITM">ITM</option>
+                    <option value="Portafusible">Losa Portafusible</option>
+                    <option value="Ninguno">Ninguno</option>
+                </select>
+            </div>
             
-            <!-- Sección de Búsqueda de Suministro -->
             <div class="form-group">
                 <label for="suministro">Buscar Suministro</label>
                 <div class="search-container">
@@ -22,16 +29,22 @@
                 </div>
             </div>
 
+            <!-- Nuevos campos extraídos de la BD actualizada -->
             <div class="form-group">
-                <label>Medidor</label>
+                <label>Medidor Actual</label>
                 <input type="text" id="medidor" readonly placeholder="Se autocompleta con la búsqueda">
             </div>
-            <div class="form-group">
-                <label>Marca</label>
-                <input type="text" id="marca" readonly placeholder="Se autocompleta con la búsqueda">
+            <div class="form-row">
+                <div class="form-group half">
+                    <label>Distrito</label>
+                    <input type="text" id="distrito" readonly placeholder="Autocompletado">
+                </div>
+                <div class="form-group half">
+                    <label>Dirección</label>
+                    <input type="text" id="direccion" readonly placeholder="Autocompletado">
+                </div>
             </div>
 
-            <!-- Campos Extraídos de Campos para catastro.xlsx -->
             <div class="form-row">
                 <div class="form-group half">
                     <label>Tipo de caja</label>
@@ -72,18 +85,6 @@
                 </div>
             </div>
 
-            <!-- ITM reubicado en su posición final -->
-            <div class="form-group">
-                <label>ITM o Losa Portafusible</label>
-                <select id="itm_portafusible" required>
-                    <option value="">Seleccionar</option>
-                    <option value="ITM">ITM</option>
-                    <option value="Portafusible">Losa Portafusible</option>
-                    <option value="Ninguno">Ninguno</option>
-                </select>
-            </div>
-
-            <!-- Lógica Condicional de Impedimentos -->
             <div class="form-group">
                 <label>Impedimento</label>
                 <select id="impedimento" required>
@@ -98,23 +99,18 @@
                 </select>
             </div>
 
-            <!-- Subida de Fotos (Optimizado para Móvil) -->
             <div class="form-group">
                 <label>Fotos (Máximo 5 por registro)</label>
                 <div class="file-upload-wrapper">
-                    <!-- El input real está oculto -->
                     <input type="file" id="fotos" accept="image/*" multiple required class="hidden-input">
-                    <!-- Este label actúa como un botón grande para móviles -->
                     <label for="fotos" class="custom-file-button">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
                         Tocar para Tomar o Elegir Fotos
                     </label>
                 </div>
                 <small id="foto-help">Subir evidencia de acometidas, estado de caja, etc.</small>
-                <!-- Aquí se mostrarán las miniaturas de las fotos -->
                 <div id="previewContainer" class="preview-container"></div>
             </div>
-            
             <button type="submit" id="btnGuardar">Guardar Registro</button>
         </form>
     </div>
