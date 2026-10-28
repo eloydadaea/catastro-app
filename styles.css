@@ -38,6 +38,7 @@ h2 {
 
 .form-row {
     display: flex;
+    flex-direction: column; /* Apila los campos verticalmente en móviles */
     gap: 15px;
 }
 
@@ -312,4 +313,11 @@ tbody tr:hover {
     object-fit: cover;
     border-radius: 8px;
     border: 1px solid #ccc;
+}
+
+/* En pantallas de tablets o computadoras (más de 600px de ancho), los pone uno al lado del otro */
+@media (min-width: 600px) {
+    .form-row {
+        flex-direction: row; 
+    }
 }
