@@ -321,3 +321,47 @@ tbody tr:hover {
         flex-direction: row; 
     }
 }
+
+/* ====== NOTIFICACIONES PERSONALIZADAS ====== */
+#custom-toast {
+    visibility: hidden;
+    min-width: 280px;
+    background-color: #333333;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease, bottom 0.3s ease;
+}
+
+#custom-toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 40px;
+}
+
+#custom-toast.success {
+    background-color: #4caf50;
+    border-left: 6px solid #43a047;
+}
+
+#custom-toast.error {
+    background-color: #F37021;
+    border-left: 6px solid #e65c00;
+}
+
+#custom-toast.warning {
+    background-color: #FFD100;
+    color: #333333;
+    border-left: 6px solid #cca700;
+    font-weight: 500;
+}
