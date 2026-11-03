@@ -143,6 +143,19 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
         return;
     }
 
+  // Obtener el valor del suministro a registrar
+    const suministroIngresado = document.getElementById('suministro').value;
+
+    // Verificar si ya existe un registro con ese suministro
+    const { data: registroPrevio, error: errorBusqueda } = await clienteSupabase
+        .from('registros_catastro')
+        .select('suministro')
+        .eq('suministro', suministroIngresado);
+
+    if (registroPrevio && registroPrevio.length > 0) {
+        alert('⚠️ Este suministro ya ha sido registrado anteriormente. No se permiten duplicados.');
+        return; // Detiene el proceso y bloquea el registro
+    }
     const btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.disabled = true;
     btnGuardar.textContent = 'Subiendo Datos y Fotos...';
