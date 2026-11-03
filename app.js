@@ -211,7 +211,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
     const { error: insertError } = await clienteSupabase.from('registros_catastro').insert([registro]);
 
     if (insertError) {
-        mostrarAlerta('Error al guardar: Verifique los datos.', 'error');
+        mostrarAlerta('Error al guardar: Ya existe este registro.', 'error');
     } else {
         mostrarAlerta('Catastro registrado exitosamente.', 'success');
         document.getElementById('catastroForm').reset();
