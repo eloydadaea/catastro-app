@@ -1,3 +1,15 @@
+// ====== FUNCIÓN PARA NOTIFICACIONES TOAST ======
+function mostrarAlerta(mensaje, tipo = 'success') {
+    const toast = document.getElementById('custom-toast');
+    toast.textContent = mensaje;
+    toast.className = `show ${tipo}`;
+    
+    // Ocultar después de 4 segundos
+    setTimeout(() => {
+        toast.className = toast.className.replace(`show ${tipo}`, "");
+    }, 4000);
+}
+
 // ====== CONFIGURACIÓN SUPABASE ======
 const supabaseUrl = 'https://kseaqcwhsvenxtmpqjvu.supabase.co'; 
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzZWFxY3doc3Zlbnh0bXBxanZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NzA3NzYsImV4cCI6MjEwODM0Njc3Nn0.xb0jWWmc1AAplHZ_Whgy3d-OCvsQyKHR3W6zFpvcKvA'; 
@@ -91,7 +103,7 @@ fotosInput.addEventListener('change', function() {
     previewContainer.innerHTML = ''; 
     
     if (this.files.length > 5) {
-        alert('Solo puedes subir un máximo de 5 fotos.');
+        mostrarAlerta('Solo puedes subir un máximo de 5 fotos.', 'warning');
         this.value = ''; 
         return;
     }
@@ -112,7 +124,7 @@ fotosInput.addEventListener('change', function() {
 // Buscar en la nueva estructura de BD
 document.getElementById('btnBuscar').addEventListener('click', async () => {
     const sum = document.getElementById('suministro').value;
-    if (!sum) return alert('Ingresa un suministro');
+    if (!sum) return mostrarAlerta('Ingresa un suministro', 'warning');
 
     const { data, error } = await clienteSupabase
         .from('suministros')
@@ -121,7 +133,7 @@ document.getElementById('btnBuscar').addEventListener('click', async () => {
         .single();
     
     if (error || !data) {
-        alert('Suministro no encontrado en la base de datos.');
+        mostrarAlerta('Suministro no encontrado en la base de datos.', 'warning');
         document.getElementById('medidor').value = '';
         document.getElementById('distrito').value = '';
         document.getElementById('direccion').value = '';
@@ -139,11 +151,11 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
     const files = fotosInput.files;
 
     if (files.length > 5) {
-        alert('⚠️ Límite excedido: El sistema solo permite un máximo de 5 fotos. Disminuye la cantidad.');
+        mostrarAlerta('⚠️ Límite excedido: El sistema solo permite un máximo de 5 fotos. Disminuye la cantidad.', 'warning');
         return;
     }
 
-  // Obtener el valor del suministro a registrar
+    // Obtener el valor del suministro a registrar
     const suministroIngresado = document.getElementById('suministro').value;
 
     // Verificar si ya existe un registro con ese suministro
@@ -153,9 +165,10 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
         .eq('suministro', suministroIngresado);
 
     if (registroPrevio && registroPrevio.length > 0) {
-        alert('⚠️ Este suministro ya ha sido registrado anteriormente. No se permiten duplicados.');
+        mostrarAlerta('⚠️ Este suministro ya ha sido registrado anteriormente. No se permiten duplicados.', 'warning');
         return; // Detiene el proceso y bloquea el registro
     }
+
     const btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.disabled = true;
     btnGuardar.textContent = 'Subiendo Datos y Fotos...';
@@ -170,7 +183,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
             .upload(fileName, file);
         
         if (uploadError) {
-            alert('Error al subir foto: ' + uploadError.message);
+            mostrarAlerta('Error al subir foto: ' + uploadError.message, 'error');
             btnGuardar.disabled = false;
             btnGuardar.textContent = 'Guardar Registro';
             return;
@@ -198,9 +211,9 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
     const { error: insertError } = await clienteSupabase.from('registros_catastro').insert([registro]);
 
     if (insertError) {
-        alert('Error en base de datos: ' + insertError.message);
+        mostrarAlerta('Error al guardar: Verifique los datos.', 'error');
     } else {
-        alert('Catastro registrado exitosamente.');
+        mostrarAlerta('Catastro registrado exitosamente.', 'success');
         document.getElementById('catastroForm').reset();
         subGroup.style.display = 'none';
         previewContainer.innerHTML = '';
