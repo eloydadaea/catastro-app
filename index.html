@@ -1,4 +1,17 @@
-<form id="catastroForm">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catastro - Registro de Medidores</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="glass-container">
+        <h2>Registro de Catastro</h2>
+        <form id="catastroForm">
+
             <div class="form-group">
                 <label>Técnico</label>
                 <select id="tecnico" required>
@@ -58,7 +71,6 @@
                 </div>
             </div>
 
-            <!-- NUEVAS COLUMNAS AUTOCOMPLETADAS -->
             <div class="form-row">
                 <div class="form-group half">
                     <label>Número de Medidor</label>
@@ -74,7 +86,6 @@
                 <label>Lectura del Medidor</label>
                 <input type="number" step="any" id="lectura_medidor" placeholder="Ingrese la lectura (ej. 1708.7)" required>
             </div>
-            <!-- FIN NUEVAS COLUMNAS -->
 
             <div class="form-row">
                 <div class="form-group half">
@@ -164,3 +175,11 @@
             </div>
             <button type="submit" id="btnGuardar">Guardar Registro</button>
         </form>
+    </div>
+
+    <!-- Contenedor para las notificaciones personalizadas -->
+    <div id="custom-toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
