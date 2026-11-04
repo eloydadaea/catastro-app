@@ -189,31 +189,35 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
 
     let fotosUrls = [];
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
-        const { error: uploadError } = await clienteSupabase.storage
-            .from('fotos_catastro')
-            .upload(fileName, file);
-        
-        if (uploadError) {
-            mostrarAlerta('Error al subir foto: ' + uploadError.message, 'error');
-            btnGuardar.disabled = false;
-            btnGuardar.textContent = 'Guardar Registro';
-            return;
+    // Solo ejecuta la subida si el usuario seleccionó archivos (ahora que es opcional)
+    if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+            const { error: uploadError } = await clienteSupabase.storage
+                .from('fotos_catastro')
+                .upload(fileName, file);
+            
+            if (uploadError) {
+                mostrarAlerta('Error al subir foto: ' + uploadError.message, 'error');
+                btnGuardar.disabled = false;
+                btnGuardar.textContent = 'Guardar Registro';
+                return;
+            }
+            
+            const { data: urlData } = clienteSupabase.storage
+                .from('fotos_catastro')
+                .getPublicUrl(fileName);
+            
+            fotosUrls.push(urlData.publicUrl);
         }
-        
-        const { data: urlData } = clienteSupabase.storage
-            .from('fotos_catastro')
-            .getPublicUrl(fileName);
-        
-        fotosUrls.push(urlData.publicUrl);
     }
 
    const registro = {
         tecnico: document.getElementById('tecnico').value,
         suministro: document.getElementById('suministro').value,
-        lectura_medidor: document.getElementById('lectura_medidor').value, 
+        // Si está vacío, envía null para evitar el error de sintaxis en float8
+        lectura_medidor: document.getElementById('lectura_medidor').value || null, 
         tipo_caja: document.getElementById('tipo_caja').value,
         tipo_chapa: document.getElementById('tipo_chapa').value,
         fase: document.getElementById('fase').value,
@@ -228,7 +232,8 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
     const { error: insertError } = await clienteSupabase.from('registros_catastro').insert([registro]);
 
     if (insertError) {
-        mostrarAlerta('Error al guardar: Ya existe este registro.', 'error');
+        // Muestra el error exacto devuelto por Supabase para facilitar diagnósticos
+        mostrarAlerta('Error en BD: ' + insertError.message, 'error');
     } else {
         mostrarAlerta('Catastro registrado exitosamente.', 'success');
         document.getElementById('catastroForm').reset();
