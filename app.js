@@ -204,6 +204,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
     }
 
    const registro = {
+       tecnico: document.getElementById('tecnico').value,
         suministro: document.getElementById('suministro').value,
         tipo_caja: document.getElementById('tipo_caja').value,
         tipo_chapa: document.getElementById('tipo_chapa').value,
