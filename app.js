@@ -212,6 +212,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
         impedimento_cod: document.getElementById('impedimento').value,
         submotivo_cod: subGroup.style.display !== 'none' ? document.getElementById('submotivo').value : null,
         itm_portafusible: document.getElementById('itm_portafusible').value, 
+        comentarios: document.getElementById('comentarios').value || null,
         fotos_urls: fotosUrls
     };
 
