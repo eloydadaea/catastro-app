@@ -34,6 +34,7 @@ const impedimentos = [
   {"codigo": "DE21", "descripcion": "Medición indirecta /Centralizado", "tiene_sub": false},
   {"codigo": "DE22", "descripcion": "Predio desabitado", "tiene_sub": false},
   {"codigo": "DE24", "descripcion": "Medidor trifasico no ingresa en caja L", "tiene_sub": false}
+  {"codigo": "0000", "descripcion": "Caja de medidor con reja / candado"}  
 ];
 
 const submotivos = {
