@@ -17,6 +17,7 @@ const clienteSupabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 // ====== DATA DE IMPEDIMENTOS Y SUBMOTIVOS ======
 const impedimentos = [
+  {"codigo": "SIN_IMP", "descripcion": "Sin impedimentos", "tiene_sub": false},
   {"codigo": "DE01", "descripcion": "Cliente Ausente", "tiene_sub": true},
   {"codigo": "DE02", "descripcion": "Negativa al catastro", "tiene_sub": true},
   {"codigo": "DE03", "descripcion": "Cliente Coordinara con LDS( Fonoluz) cambio de medidor", "tiene_sub": false},
