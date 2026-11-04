@@ -71,6 +71,12 @@ impedimentos.forEach(imp => {
     opt.value = imp.codigo;
     opt.textContent = `${imp.codigo} - ${imp.descripcion}`;
     opt.dataset.tieneSub = imp.tiene_sub;
+    
+    // Si el código es SIN_IMP, lo marcamos como seleccionado
+    if (imp.codigo === "SIN_IMP") {
+        opt.selected = true;
+    }
+    
     impSelect.appendChild(opt);
 });
 
