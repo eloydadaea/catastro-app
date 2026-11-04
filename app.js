@@ -34,7 +34,7 @@ const impedimentos = [
   {"codigo": "DE21", "descripcion": "Medición indirecta /Centralizado", "tiene_sub": false},
   {"codigo": "DE22", "descripcion": "Predio desabitado", "tiene_sub": false},
   {"codigo": "DE24", "descripcion": "Medidor trifasico no ingresa en caja L", "tiene_sub": false},
-  {"codigo": "0000", "descripcion": "Caja de medidor con reja / candado"}  
+  {"codigo": "0000", "descripcion": "Caja de medidor con reja / candado", "tiene_sub": false}  
 ];
 
 const submotivos = {
@@ -145,10 +145,16 @@ document.getElementById('btnBuscar').addEventListener('click', async () => {
         document.getElementById('medidor').value = '';
         document.getElementById('distrito').value = '';
         document.getElementById('direccion').value = '';
+        document.getElementById('numero_medidor').value = ''; 
+        document.getElementById('marca').value = ''; 
+        document.getElementById('lectura_medidor').value = '';
     } else {
         document.getElementById('medidor').value = data.medidor_actual || 'SIN DATO';
         document.getElementById('distrito').value = data.distrito || 'SIN DATO';
         document.getElementById('direccion').value = data.direccion || 'SIN DATO';
+        document.getElementById('numero_medidor').value = data.numero_medidor || 'SIN DATO'; 
+        document.getElementById('marca').value = data.marca || 'SIN DATO'; 
+        document.getElementById('lectura_medidor').value = data.lectura_medidor || '';
     }
 });
 
@@ -159,7 +165,7 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
     const files = fotosInput.files;
 
     if (files.length > 5) {
-        mostrarAlerta('⚠️ Límite excedido: El sistema solo permite un máximo de 5 fotos. Disminuye la cantidad.', 'warning');
+        mostrarAlerta('⚠️ Límite excedido: El sistema solo permite un máximo de 5 fotos.', 'warning');
         return;
     }
 
@@ -205,8 +211,9 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
     }
 
    const registro = {
-       tecnico: document.getElementById('tecnico').value,
+        tecnico: document.getElementById('tecnico').value,
         suministro: document.getElementById('suministro').value,
+        lectura_medidor: document.getElementById('lectura_medidor').value, 
         tipo_caja: document.getElementById('tipo_caja').value,
         tipo_chapa: document.getElementById('tipo_chapa').value,
         fase: document.getElementById('fase').value,
@@ -225,6 +232,11 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
     } else {
         mostrarAlerta('Catastro registrado exitosamente.', 'success');
         document.getElementById('catastroForm').reset();
+        
+        // Forzar opción Sin impedimentos después del reset
+        const impSelect = document.getElementById('impedimento');
+        impSelect.value = "SIN_IMP";
+        
         subGroup.style.display = 'none';
         previewContainer.innerHTML = '';
     }
