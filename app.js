@@ -128,6 +128,43 @@ fotosInput.addEventListener('change', function() {
     });
 });
 
+// ====== FUNCIÓN PARA COMPRIMIR IMÁGENES ======
+async function comprimirImagen(file, maxWidth = 1200, quality = 0.7) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                // Redimensionar manteniendo proporción
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    const compressedFile = new File([blob], file.name, {
+                        type: 'image/jpeg',
+                        lastModified: Date.now(),
+                    });
+                    resolve(compressedFile);
+                }, 'image/jpeg', quality);
+            };
+        };
+    });
+}
+
 // ====== COMUNICACIÓN CON SUPABASE ======
 // Buscar en la nueva estructura de BD
 document.getElementById('btnBuscar').addEventListener('click', async () => {
@@ -158,7 +195,7 @@ document.getElementById('btnBuscar').addEventListener('click', async () => {
     }
 });
 
-// Guardado de registro y fotos con validación dura
+// Guardado de registro y fotos con compresión y validación
 document.getElementById('catastroForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -180,79 +217,50 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
 
     if (registroPrevio && registroPrevio.length > 0) {
         mostrarAlerta('⚠️ Este suministro ya ha sido registrado anteriormente. No se permiten duplicados.', 'warning');
-        return; // Detiene el proceso y bloquea el registro
+        return; 
     }
 
     const btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.disabled = true;
-    btnGuardar.textContent = 'Subiendo Datos y Fotos...';
+    btnGuardar.textContent = 'Procesando y Subiendo...';
 
     let fotosUrls = [];
-// Función para comprimir la imagen antes de subirla
-async function comprimirImagen(file, maxWidth = 1200, quality = 0.7) {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
 
-                // Redimensionar si es muy grande manteniendo la proporción
-                if (width > maxWidth) {
-                    height = Math.round((height * maxWidth) / width);
-                    width = maxWidth;
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-
-                // Convertir a blob comprimido (formato JPEG con calidad ajustable)
-                canvas.toBlob((blob) => {
-                    const compressedFile = new File([blob], file.name, {
-                        type: 'image/jpeg',
-                        lastModified: Date.now(),
-                    });
-                    resolve(compressedFile);
-                }, 'image/jpeg', quality);
-            };
-        };
-    });
-}
-    // Solo ejecuta la subida si el usuario seleccionó archivos (ahora que es opcional)
+    // Si seleccionó archivos, los comprimimos y subimos
     if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
-            const { error: uploadError } = await clienteSupabase.storage
-                .from('fotos_catastro')
-                .upload(fileName, file);
-            
-            if (uploadError) {
-                mostrarAlerta('Error al subir foto: ' + uploadError.message, 'error');
-                btnGuardar.disabled = false;
-                btnGuardar.textContent = 'Guardar Registro';
-                return;
+            try {
+                const fileOriginal = files[i];
+                
+                // Comprimimos la imagen antes de enviarla
+                const fileComprimido = await comprimirImagen(fileOriginal, 1200, 0.7);
+
+                const fileName = `${Date.now()}_${fileComprimido.name.replace(/\s/g, '_')}`;
+                const { error: uploadError } = await clienteSupabase.storage
+                    .from('fotos_catastro')
+                    .upload(fileName, fileComprimido);
+                
+                if (uploadError) {
+                    mostrarAlerta('Error al subir foto: ' + uploadError.message, 'error');
+                    btnGuardar.disabled = false;
+                    btnGuardar.textContent = 'Guardar Registro';
+                    return;
+                }
+                
+                const { data: urlData } = clienteSupabase.storage
+                    .from('fotos_catastro')
+                    .getPublicUrl(fileName);
+                
+                fotosUrls.push(urlData.publicUrl);
+            } catch (err) {
+                console.error("Error al procesar foto:", err);
             }
-            
-            const { data: urlData } = clienteSupabase.storage
-                .from('fotos_catastro')
-                .getPublicUrl(fileName);
-            
-            fotosUrls.push(urlData.publicUrl);
         }
     }
 
    const registro = {
         tecnico: document.getElementById('tecnico').value,
         suministro: document.getElementById('suministro').value,
-        // Si está vacío, envía null para evitar el error de sintaxis en float8
         lectura_medidor: document.getElementById('lectura_medidor').value || null, 
         tipo_caja: document.getElementById('tipo_caja').value,
         tipo_chapa: document.getElementById('tipo_chapa').value,
@@ -268,7 +276,6 @@ async function comprimirImagen(file, maxWidth = 1200, quality = 0.7) {
     const { error: insertError } = await clienteSupabase.from('registros_catastro').insert([registro]);
 
     if (insertError) {
-        // Muestra el error exacto devuelto por Supabase para facilitar diagnósticos
         mostrarAlerta('Error en BD: ' + insertError.message, 'error');
     } else {
         mostrarAlerta('Catastro registrado exitosamente.', 'success');
