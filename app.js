@@ -78,7 +78,8 @@ const submotivos = {
     {"codigo": "IN6", "descripcion": "caja medidor inaccesible por mercaderia de cliente"},
     {"codigo": "IN7", "descripcion": "caja medidor inaccesible por tanque de agua"},
     {"codigo": "IN8", "descripcion": "caja medidor inaccesible por pared o escalera"},
-    {"codigo": "IN9", "descripcion": "caja medidor inaccesible por ladrillos o piedras"}
+    {"codigo": "IN9", "descripcion": "caja medidor inaccesible por ladrillos o piedras"},
+      {"codigo": "000", "descripcion": "caja medidor soldada"}
   ],
   "DE17": [
     {"codigo": "CN1", "descripcion": "CNR por conexión directa prescindiendo del medidor"},
