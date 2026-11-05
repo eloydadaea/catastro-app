@@ -195,7 +195,7 @@ document.getElementById('btnBuscar').addEventListener('click', async () => {
     }
 });
 
-// Guardado de registro y fotos con compresión y validación
+// Guardado de registro y fotos de forma optimizada
 document.getElementById('catastroForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -206,59 +206,48 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
         return;
     }
 
-    // Obtener el valor del suministro a registrar
-    const suministroIngresado = document.getElementById('suministro').value;
-
-    // Verificar si ya existe un registro con ese suministro
-    const { data: registroPrevio, error: errorBusqueda } = await clienteSupabase
-        .from('registros_catastro')
-        .select('suministro')
-        .eq('suministro', suministroIngresado);
-
-    if (registroPrevio && registroPrevio.length > 0) {
-        mostrarAlerta('⚠️ Este suministro ya ha sido registrado anteriormente. No se permiten duplicados.', 'warning');
-        return; 
-    }
-
     const btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.disabled = true;
-    btnGuardar.textContent = 'Procesando y Subiendo...';
+    btnGuardar.textContent = 'Guardando rápidamente...';
 
     let fotosUrls = [];
 
-    // Si seleccionó archivos, los comprimimos y subimos
+    // Subir fotos en paralelo si el usuario seleccionó archivos
     if (files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-            try {
-                const fileOriginal = files[i];
-                
-                // Comprimimos la imagen antes de enviarla
+        try {
+            const promesasSubida = Array.from(files).map(async (fileOriginal) => {
+                // Comprimir imagen
                 const fileComprimido = await comprimirImagen(fileOriginal, 1200, 0.7);
-
-                const fileName = `${Date.now()}_${fileComprimido.name.replace(/\s/g, '_')}`;
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}_${fileComprimido.name.replace(/\s/g, '_')}`;
+                
+                // Subir a Supabase Storage
                 const { error: uploadError } = await clienteSupabase.storage
                     .from('fotos_catastro')
                     .upload(fileName, fileComprimido);
                 
-                if (uploadError) {
-                    mostrarAlerta('Error al subir foto: ' + uploadError.message, 'error');
-                    btnGuardar.disabled = false;
-                    btnGuardar.textContent = 'Guardar Registro';
-                    return;
-                }
+                if (uploadError) throw new Error(uploadError.message);
                 
+                // Obtener URL pública
                 const { data: urlData } = clienteSupabase.storage
                     .from('fotos_catastro')
                     .getPublicUrl(fileName);
                 
-                fotosUrls.push(urlData.publicUrl);
-            } catch (err) {
-                console.error("Error al procesar foto:", err);
-            }
+                return urlData.publicUrl;
+            });
+
+            // Esperar a que todas las fotos terminen de subirse simultáneamente
+            fotosUrls = await Promise.all(promesasSubida);
+
+        } catch (uploadErr) {
+            mostrarAlerta('Error al subir fotos: ' + uploadErr.message, 'error');
+            btnGuardar.disabled = false;
+            btnGuardar.textContent = 'Guardar Registro';
+            return;
         }
     }
 
-   const registro = {
+    // Preparar objeto de registro
+    const registro = {
         tecnico: document.getElementById('tecnico').value,
         suministro: document.getElementById('suministro').value,
         lectura_medidor: document.getElementById('lectura_medidor').value || null, 
@@ -273,10 +262,16 @@ document.getElementById('catastroForm').addEventListener('submit', async (e) => 
         fotos_urls: fotosUrls
     };
 
+    // Inserción directa en la base de datos (un solo viaje)
     const { error: insertError } = await clienteSupabase.from('registros_catastro').insert([registro]);
 
     if (insertError) {
-        mostrarAlerta('Error en BD: ' + insertError.message, 'error');
+        // Si el código de error es 23505 (violación de llave única / duplicado)
+        if (insertError.code === '23505') {
+            mostrarAlerta('⚠️ Este suministro ya ha sido registrado anteriormente.', 'warning');
+        } else {
+            mostrarAlerta('Error en BD: ' + insertError.message, 'error');
+        }
     } else {
         mostrarAlerta('Catastro registrado exitosamente.', 'success');
         document.getElementById('catastroForm').reset();
