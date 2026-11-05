@@ -44,21 +44,52 @@ const submotivos = {
     {"codigo": "CA05", "descripcion": "Caja de medidor con reja / candado"}
   ],
   "DE02": [
-    {"codigo": "NE2", "descripcion": "Propietario o familiar, no desea el catastro"},
+    {"codigo": "NE2", "descripcion": "Propietario o familiar, no desea el reemplazo del medidor"},
     {"codigo": "NE4", "descripcion": "Encargado(a) o Inquilino, no tiene autorización"}
   ],
   "DE05": [
     {"codigo": "AC1", "descripcion": "Acometida NKY / NYY recalentada"},
     {"codigo": "AC2", "descripcion": "Acometida NKY / NYY corta"},
+    {"codigo": "AC3", "descripcion": "Acometida Concéntrica recalentada"},
+    {"codigo": "AC4", "descripcion": "Acometida Concéntrica corta"},
+    {"codigo": "AC5", "descripcion": "Acometida Empalmada"},
+    {"codigo": "AC6", "descripcion": "Acometida expuesta"},
     {"codigo": "AC7", "descripcion": "Acometida sin tensión"},
     {"codigo": "CA1", "descripcion": "Caja de medidor en mal estado / corroída"},
+    {"codigo": "CA2", "descripcion": "Caja de medidor sin fijación en pared (caja en el aire)"},
+    {"codigo": "CA3", "descripcion": "Caja de medidor a baja altura o ras del piso"},
+    {"codigo": "CA4", "descripcion": "Caja de medidor a altura elevada"},
     {"codigo": "CA5", "descripcion": "Caja embutida"},
-    {"codigo": "MU1", "descripcion": "Murete derruido / agrietado"}
+    {"codigo": "CA6", "descripcion": "caja MM/MT"},
+    {"codigo": "CA7", "descripcion": "Caja toma T-30"},
+    {"codigo": "MU1", "descripcion": "Murete derruido / agrietado"},
+    {"codigo": "MU2", "descripcion": "murete sin fijación"},
+    {"codigo": "MU3", "descripcion": "murete no existente (caja en el aire)"},
+    {"codigo": "MU4", "descripcion": "murete enterrado"}
   ],
   "DE07": [
     {"codigo": "IN1", "descripcion": "Caja medidor inaccesible por plantas o arbustos"},
     {"codigo": "IN2", "descripcion": "Pared del cliente deteriorado"},
-    {"codigo": "IN4", "descripcion": "caja medidor inaccesible por auto estacionado"}
+    {"codigo": "IN3", "descripcion": "Caja medidor inaccesible por árbol"},
+    {"codigo": "IN4", "descripcion": "caja medidor inaccesible por auto estacionado"},
+    {"codigo": "IN5", "descripcion": "caja medidor inaccesible por puerta o reja de garaje"},
+    {"codigo": "IN6", "descripcion": "caja medidor inaccesible por mercaderia de cliente"},
+    {"codigo": "IN7", "descripcion": "caja medidor inaccesible por tanque de agua"},
+    {"codigo": "IN8", "descripcion": "caja medidor inaccesible por pared o escalera"},
+    {"codigo": "IN9", "descripcion": "caja medidor inaccesible por ladrillos o piedras"}
+  ],
+  "DE17": [
+    {"codigo": "CN1", "descripcion": "CNR por conexión directa prescindiendo del medidor"},
+    {"codigo": "CN2", "descripcion": "CNR por directo en bornera"},
+    {"codigo": "CN3", "descripcion": "CNR por conexión invertida - en contrafase"},
+    {"codigo": "CN4", "descripcion": "CNR por puente en bornera"},
+    {"codigo": "CN5", "descripcion": "CNR por cápsula con agujero"},
+    {"codigo": "CN6", "descripcion": "CNR por numerador con agujero"}
+  ],
+  "DE18": [
+    {"codigo": "PE1", "descripcion": "zona peligrosa por delincuencia"},
+    {"codigo": "PE2", "descripcion": "zona peligrosa por perros"},
+    {"codigo": "PE3", "descripcion": "zona peligrosa por terreno desnivel"}
   ]
 };
 
